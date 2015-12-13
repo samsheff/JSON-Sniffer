@@ -21,7 +21,7 @@ cap.each_packet do |pkt|
       end
       if pkt.raw_data.include? "Content-Encoding: gzip"
         begin
-          gz = Zlib::GzipReader.new(StringIO.new(pkt.raw_data.partition('gzip').last.strip))    
+          gz = Zlib::GzipReader.new(StringIO.new(pkt.raw_data.split("\r\n\r\n")))
           s = "#{pkt.time} - #{url}:#{pkt.sport} < #{status}"
           json_data = gz.read
         rescue
@@ -29,7 +29,7 @@ cap.each_packet do |pkt|
         end
       else
         s = "#{pkt.time} - #{url}:#{pkt.dport} < #{status}: #{pkt.raw_data}"
-        json_data = pkt.raw_data
+        json_data = pkt.raw_data.split("\r\n\r\n", 1)
       end
        
       File.open("./#{url}:#{pkt.sport} - #{pkt.time}.json", 'w') { |file| file.write(json_data) } if json_data
