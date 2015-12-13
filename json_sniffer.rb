@@ -28,7 +28,7 @@ cap.each_packet do |pkt|
           s = "#{pkt.time} - #{url}:#{pkt.sport} < #{status}"
         end
       else
-        s = "#{pkt.time} - #{url}:#{pkt.dport} < #{status}: #{pkt.raw_data}"
+        s = "#{pkt.time} - #{url}:#{pkt.dport} < #{status}"
         json_data = pkt.raw_data.split("\r\n\r\n", 1)
       end
        
